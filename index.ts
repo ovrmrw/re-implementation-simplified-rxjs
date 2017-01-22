@@ -7,7 +7,7 @@ const myObservable = new Observable<number>((observer) => {
   const datasource = new DataSource()
   datasource.ondata = (e) => observer.next(e)
   datasource.oncomplete = () => observer.complete()
-  return () => datasource.destroy() // unsubscribeが呼ばれたときに実行されるコールバック
+  return () => datasource.destroy() // run when unsubscribe is called.
 })
 
 
