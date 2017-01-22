@@ -1,4 +1,4 @@
-import { IObserver, ISubscription } from './interfaces';
+import { IObserver, ISubscription } from './interfaces'
 
 
 export class SafeObserver<T> implements IObserver<T>, ISubscription {
