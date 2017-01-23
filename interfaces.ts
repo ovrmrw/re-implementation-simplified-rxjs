@@ -2,6 +2,7 @@ export interface IObserver<T> {
   next: (value: T) => void,
   error: (error: any) => void,
   complete: () => void,
+  name: string,
 }
 
 
@@ -14,7 +15,8 @@ export interface ISubscribable<T> {
   subscribe: (
     observerOrNext: Partial<IObserver<T>> | ((value: T) => void),
     error?: (error: any) => void,
-    complete?: () => void
+    complete?: () => void,
+    name?: string,
   ) => UnsubscribeCallback
 }
 

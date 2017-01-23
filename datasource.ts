@@ -15,6 +15,7 @@ export class DataSource {
 
 
   emit(n: number): void {
+    console.log('emit')
     const limit = 10
     if (this.ondata) {
       this.ondata(n)
@@ -29,11 +30,11 @@ export class DataSource {
 
 
   destroy(): void {
-    if (!this.isDestroied) {
-      this.isDestroied = true
-      console.log('destroy')
-      clearInterval(this.id)
-    }
+    // if (!this.isDestroied) {
+    //   this.isDestroied = true
+    console.log('destroy')
+    clearInterval(this.id)
+    // }
   }
 
 }

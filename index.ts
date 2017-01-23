@@ -13,13 +13,22 @@ const myObservable = new Observable<number>((observer) => {
 
 const unsubscribe = myObservable
   .map(value => value + value)
-  .filter(value => value > 5)
-  .map(value => value + '!')
-  .take(5)
+  // .filter(value => value > 5)
+  // .map(value => value + '!')
+  // .take(5)
   .subscribe({
-    next: value => console.log(value),
-    error: err => { },
-    complete: () => console.log('complete')
+    next: value => {
+      console.log('final:', 'next')
+      console.log(value)
+    },
+    error: err => {
+      console.log('final:', 'error')
+    },
+    complete: () => {
+      console.log('final:', 'complete')
+      console.log('complete')
+    },
+    name: 'final'
   })
 
 

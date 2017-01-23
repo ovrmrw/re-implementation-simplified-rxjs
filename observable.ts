@@ -16,22 +16,24 @@ export class Observable<T> implements ISubscribable<T> {
   subscribe(this: Observable<T>,
     observerOrNext: Partial<IObserver<T>> | ((value: T) => void),
     error?: (error: any) => void,
-    complete?: () => void
+    complete?: () => void,
+    name?: string,
   ): UnsubscribeCallback {
+
+    console.log('Run subscribe:', (observerOrNext.name || name) + ':', 'in Observable')
 
     let observer: Partial<IObserver<T>> = observerOrNext
     if (observerOrNext instanceof Function) {
-      observer = { next: observerOrNext }
-      if (error) {
-        observer = Object.assign(observer, { error })
-      }
-      if (complete) {
-        observer = Object.assign(observer, { complete })
+      observer = {
+        next: observerOrNext,
+        error,
+        complete,
+        name,
       }
     }
 
     const safeObserver = new SafeObserver(observer)
-    safeObserver.unsub = this._subscribe(safeObserver)
+    safeObserver.unsub = this._subscribe(safeObserver) // このときObservableチェーンの上位のsubscribeが実行される。
     return safeObserver.unsubscribe.bind(safeObserver)
   }
 
