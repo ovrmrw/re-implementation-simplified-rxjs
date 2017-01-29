@@ -1,40 +1,23 @@
 export class DataSource {
-  private id: NodeJS.Timer
-  private isDestroied = false
-
-  ondata: (value: number) => void
+  id: NodeJS.Timer
+  onnext: (value: number) => void
   oncomplete: () => void
 
 
   constructor() {
     let i = 0
     this.id = setInterval(() => {
-      this.emit(i++)
-    }, 200)
-  }
-
-
-  emit(n: number): void {
-    console.log('emit')
-    const limit = 10
-    if (this.ondata) {
-      this.ondata(n)
-    }
-    if (n === limit) {
-      if (this.oncomplete) {
-        this.oncomplete()
+      if (this.onnext) {
+        this.onnext(i++)
       }
-      this.destroy()
-    }
+    }, 100)
   }
 
 
   destroy(): void {
-    // if (!this.isDestroied) {
-    //   this.isDestroied = true
-    console.log('destroy')
+    console.log('destroy is called.')
     clearInterval(this.id)
-    // }
+    this.oncomplete()
   }
 
 }

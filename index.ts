@@ -1,37 +1,30 @@
-import './add-operators'
-import { Observable } from './observable'
+import 'core-js'
+
 import { DataSource } from './datasource'
+import { Observable, Subscription } from './my-rxjs'
+import './my-rxjs/add-operators'
 
 
-const myObservable = new Observable<number>((observer) => {
-  const datasource = new DataSource()
-  datasource.ondata = (e) => observer.next(e)
-  datasource.oncomplete = () => observer.complete()
-  return () => datasource.destroy() // run when unsubscribe is called.
+const observable = new Observable<number>((observer) => {
+  const ds = new DataSource()
+  ds.onnext = (value) => observer.next(value)
+  ds.oncomplete = () => observer.complete()
+  return new Subscription({
+    complete: () => ds.destroy()
+  })
 })
 
 
-const unsubscribe = myObservable
-  .map(value => value + value)
-  // .filter(value => value > 5)
-  // .map(value => value + '!')
-  // .take(5)
-  .subscribe({
-    next: value => {
-      console.log('final:', 'next')
-      console.log(value)
-    },
-    error: err => {
-      console.log('final:', 'error')
-    },
-    complete: () => {
-      console.log('final:', 'complete')
-      console.log('complete')
-    },
-    name: 'final'
-  })
+const subscription =
+  observable
+    .map(value => value * 2)
+    .filter(value => value > 10)
+    .subscribe({
+      next: (value) => console.log(value),
+      complete: () => console.log('complete!')
+    })
 
 
-// setTimeout(() => {
-//   unsubscribe()
-// }, 2000)
+setTimeout(() => {
+  subscription.unsubscribe()
+}, 1000)
