@@ -30,11 +30,18 @@ const subject = new Subject<number>()
 
 const subscription2 =
   subject
-    .map(value => value * 2)
-    .filter(value => value > 3)
+    .map(value => value * 100)
     .subscribe({
       next: value => console.log(value),
-      complete: () => console.log('subject complete!')
+      complete: () => console.log('subject1 complete!')
+    })
+
+const subscription3 =
+  subject
+    .map(value => value * 1000)
+    .subscribe({
+      next: value => console.log(value),
+      complete: () => console.log('subject2 complete!')
     })
 
 subject.next(1)
@@ -47,5 +54,5 @@ setTimeout(() => {
   subscription1.unsubscribe()
   subscription2.unsubscribe()
 
-  subject.next(4) // not be emitted.
+  subject.next(4)
 }, 1000)
