@@ -3,14 +3,14 @@ import { IObserver } from './interfaces'
 
 export class SafeObserver<T> implements IObserver<T> {
   constructor(
-    private observer: Partial<IObserver<T>>
+    private destination: Partial<IObserver<T>>
   ) { }
 
 
   next(value: T) {
-    if (this.observer.next) {
+    if (this.destination.next) {
       try {
-        this.observer.next(value)
+        this.destination.next(value)
       } catch (err) {
         throw err
       }
@@ -19,9 +19,9 @@ export class SafeObserver<T> implements IObserver<T> {
 
 
   error(err) {
-    if (this.observer.error) {
+    if (this.destination.error) {
       try {
-        this.observer.error(err)
+        this.destination.error(err)
         this.complete()
       } catch (err) {
         throw err
@@ -31,9 +31,9 @@ export class SafeObserver<T> implements IObserver<T> {
 
 
   complete() {
-    if (this.observer.complete) {
+    if (this.destination.complete) {
       try {
-        this.observer.complete()
+        this.destination.complete()
       } catch (err) {
         throw err
       }
