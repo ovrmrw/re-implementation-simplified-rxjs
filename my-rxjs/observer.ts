@@ -6,12 +6,12 @@ export class SafeObserver<T> implements IObserver<T> {
 
 
   constructor(
-    private destination: Partial<IObserver<T>>
+    private destination: Partial<IObserver<T>> | null
   ) { }
 
 
   next(value: T) {
-    if (!this.isStopped && this.destination.next) {
+    if (!this.isStopped && this.destination && this.destination.next) {
       try {
         this.destination.next(value)
       } catch (err) {
@@ -22,7 +22,7 @@ export class SafeObserver<T> implements IObserver<T> {
 
 
   error(err) {
-    if (!this.isStopped && this.destination.error) {
+    if (!this.isStopped && this.destination && this.destination.error) {
       try {
         this.destination.error(err)
         this.complete()
@@ -34,10 +34,11 @@ export class SafeObserver<T> implements IObserver<T> {
 
 
   complete() {
-    if (!this.isStopped && this.destination.complete) {
+    if (!this.isStopped && this.destination && this.destination.complete) {
       this.isStopped = true
       try {
         this.destination.complete()
+        this.destination = null
       } catch (err) {
         throw err
       }

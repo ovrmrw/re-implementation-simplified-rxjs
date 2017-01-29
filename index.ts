@@ -55,4 +55,6 @@ setTimeout(() => {
   subscription2.unsubscribe()
 
   subject.next(4)
+  subscription3.unsubscribe()
+  subject.next(5)
 }, 1000)
