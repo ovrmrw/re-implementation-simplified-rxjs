@@ -2,13 +2,16 @@ import { IObserver } from './interfaces'
 
 
 export class SafeObserver<T> implements IObserver<T> {
+  isStopped = false
+
+
   constructor(
     private destination: Partial<IObserver<T>>
   ) { }
 
 
   next(value: T) {
-    if (this.destination.next) {
+    if (!this.isStopped && this.destination.next) {
       try {
         this.destination.next(value)
       } catch (err) {
@@ -19,7 +22,7 @@ export class SafeObserver<T> implements IObserver<T> {
 
 
   error(err) {
-    if (this.destination.error) {
+    if (!this.isStopped && this.destination.error) {
       try {
         this.destination.error(err)
         this.complete()
@@ -31,7 +34,8 @@ export class SafeObserver<T> implements IObserver<T> {
 
 
   complete() {
-    if (this.destination.complete) {
+    if (!this.isStopped && this.destination.complete) {
+      this.isStopped = true
       try {
         this.destination.complete()
       } catch (err) {
